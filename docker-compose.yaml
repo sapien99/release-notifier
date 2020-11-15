@@ -1,0 +1,12 @@
+version: "3.8"
+services:
+  watcher:
+    build: 
+      context: $PWD
+    volumes:
+    - $PWD/profiles:/opt/app/profiles
+    environment:
+    - DATASTORE=file
+    - APIKEY=gQzMFWZJHjGt5K7L
+    ports:
+    - 8080:8080

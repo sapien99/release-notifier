@@ -1,0 +1,21 @@
+{
+  "repositories": [
+    {
+      "name": "prysmaticlabs/prysm-beacon-chain",
+      "pattern": "^v",
+      "filter": "v",
+      "type": "docker"
+    }
+  ],
+  "owner": "sample",
+  "notifications": [
+    {
+      "type": "slack",
+      "url": "$SLACK_HOOK_URL"
+    },
+    {
+      "type": "discord",
+      "url": "$DISCORD_HOOK_URL"
+    }
+  ]
+}
