@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        IMAGE = 'sapien99/release-notifier'
+        IMAGE = 'sapien99/release-alerter'
         TAG = 'latest'
     }
 
