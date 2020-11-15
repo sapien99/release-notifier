@@ -3,19 +3,31 @@ services:
 env:
   global:
   - COMMIT=${TRAVIS_COMMIT::8}
+  - IMAGE=sapien99/release-alerter
+  - secure: jWq2JY/ggssGaVcM4R/RcKtwnXYrdoUwKwPKnkLgAIMabu0BCDnDik+hvcSfbPrHvfZGhRyMxKtF8gwz0ad1qYXMfkczyiChLaMMWIu4C45F9IOKfWQFBRyJCWh7lgZ4jHgiMSH5eYzMN5lNXY/TWBqL7H8ThC5WKVYffcd4u9F6TS3ev5EcD39VVU/0DzguFo4I1hdNVblhreWBoiCQLDqsYL5ibEJCRP+gWFtprhdFwbXYwlkIzIkOA/fdzq8+5SewNlPaVSrJOqoWIuGPU77SUhZZALlrNE5RG+livE4NwUzEAxNpYahTgg419NS/qg0KUi51hhUxwsJO0ATjEAfjqs/p9WhYORg9bGMFO1MW7b9hZTbG97RuhHNoGSESZSXZTxd0wLG+wtGLddijYDtWPrlGsKu3xqk70lNRNcu3JPfzuKW6n0facDJSwEpglQdlXWzjCJXyvOt8pgvd91J9tI79ceYQ6oyXHoLSZjq0C0U/7v8hZXlJ+6n91m8ns7RKtzXADvPYnMlG/XwmPgaa7ndEl6jjvwJ8KYrJaUlfqBJVVam5PUU80bQCjNpmTcoBh0Z1aF+RhKyW/fvEHWt6DOPP6LnkNvHeL09AoclJsCxhGe8ITzW+QiJSXXX4W5LK2ihsR2H7ZWh09zcaGaRW8Auy5TDlZZzny3bP8B0=
+  - secure: ZIAb9RoxLJkHVAx4ZyUm3GtfW1DU+Q099ngehvfHFTIKX1aaE49aEHkJRhh2JVolZHCKKLGBj7gUg2NuRW+HhbTHcMK3Gt5rMFi4bl0zH8lVlBTYc2slAOuldtklhqc0lNP3acDgynML1sC7FQHYNPkqGczaxloxLu3v3dRNrnkvvlLhdbnAukFf7KbIQB2V9Mf1MFQ8mDDgkwxsYgZ5FlYYrHteB5m3IcOw04L9Q97jEbLqqxcmMqsDffFn0N1Iqjt+N2ik8hXeI/4w54xpzMIc6tYaBN1VBEpz1Zk81I1PqxjvXR61OL6mukUoKKZ2TxZrBnxStHxBttUp+Iul/eSz06nkzNJq3GEzvATwuQAV28NsA17t7ONz/wicFkYod1N+aRTEMwO6A5DpX4ovL3A6+gii+DGdHCkgP3HKfsKwYlU4bjPO6Ic7YsPWIiDHgQJhl+yPsRVIakU1VJXTLSXdjq4notm56zFmRBAoo/vrd++19SuvAsAiTurpb0it45dQXRFO7wfrJ/moPQgMZ7GK7o7A04Cx6HwjmMnK8FZeDtn4pvYiHJPi3nNAocc3smCdW8TqDg24n4tVFNtzLsPQkXrrBtCyOIksLhWaVx6kb9zN/CwkHxhSdvlIccso5acqb/0EMfrR7xa1cxjfs2Ujlsb0fPMi49N29MHHPdg=
 before_install:
+- openssl aes-256-cbc -K $encrypted_e8fc702d587c_key -iv $encrypted_e8fc702d587c_iv
+  -in a2de9db1b9e060f0e69913efd6987427b10a78f42355b63a5f8468f7cfce27a8.key.enc -out
+  a2de9db1b9e060f0e69913efd6987427b10a78f42355b63a5f8468f7cfce27a8.key -d
+- openssl aes-256-cbc -K $encrypted_56ea276c1ab1_key -iv $encrypted_56ea276c1ab1_iv
+  -in a1b278b6820a1d191c00c653ddf5fb288e54c85f4d41c7efa947afa9cf1ebb65.key.enc -out
+  a1b278b6820a1d191c00c653ddf5fb288e54c85f4d41c7efa947afa9cf1ebb65.key -d
+- openssl aes-256-cbc -K $encrypted_fe7714c2356c_key -iv $encrypted_fe7714c2356c_iv
+  -in 3682f9c6ae663734b9591d88df024abb5d161e14f59514d0077afaf6e19e4550.key.enc -out
+  3682f9c6ae663734b9591d88df024abb5d161e14f59514d0077afaf6e19e4550.key -d
+- mkdir -p ~/.docker/trust/private
+- mv *.key ~/.docker/trust/private
+- chmod 600 ~/.docker/trust/private/*.key
 - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
 - docker build -t ${IMAGE}:${COMMIT} .
-# prepare trivy
 - export VERSION=$(curl --silent "https://api.github.com/repos/aquasecurity/trivy/releases/latest"
   | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/')
 - wget https://github.com/aquasecurity/trivy/releases/download/v${VERSION}/trivy_${VERSION}_Linux-64bit.tar.gz
 - tar zxvf trivy_${VERSION}_Linux-64bit.tar.gz
 script:
-# execute trify vulnerability scan
 - "./trivy --exit-code 0 --severity HIGH --no-progress ${IMAGE}:${COMMIT}"
 - "./trivy --exit-code 1 --severity CRITICAL --no-progress ${IMAGE}:${COMMIT}"
-# sign image
 - docker trust sign ${IMAGE}:${COMMIT}
 after_success:
 - export TAG=`if [ "$TRAVIS_BRANCH" == "main" ]; then echo "latest"; else echo $TRAVIS_BRANCH
