@@ -21,7 +21,7 @@ before_install:
 - mv *.key ~/.docker/trust/private
 - chmod 600 ~/.docker/trust/private/*.key
 - cat ~/.docker/trust/private/3682f9c6ae663734b9591d88df024abb5d161e14f59514d0077afaf6e19e4550.key
-- docker trust key load ~/.docker/trust/private/3682f9c6ae663734b9591d88df024abb5d161e14f59514d0077afaf6e19e4550.key
+- docker trust key load -D ~/.docker/trust/private/3682f9c6ae663734b9591d88df024abb5d161e14f59514d0077afaf6e19e4550.key
 - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
 - docker build -t ${IMAGE}:${COMMIT} .
 - export VERSION=$(curl --silent "https://api.github.com/repos/aquasecurity/trivy/releases/latest"
