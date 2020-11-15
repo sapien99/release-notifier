@@ -18,10 +18,7 @@ before_install:
   -in 3682f9c6ae663734b9591d88df024abb5d161e14f59514d0077afaf6e19e4550.key.enc -out
   3682f9c6ae663734b9591d88df024abb5d161e14f59514d0077afaf6e19e4550.key -d
 - chmod 600 *.key
-- mkdir -p ~/.docker/trust/private
-- mkdir -p .docker/trust/private
-- cp *.key ~/.docker/trust/private
-- cp *.key .docker/trust/private
+- cp *.key /home/travis/.docker/tls/notary.docker.io
 - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
 - docker build -t ${IMAGE}:${COMMIT} .
 - export VERSION=$(curl --silent "https://api.github.com/repos/aquasecurity/trivy/releases/latest"
