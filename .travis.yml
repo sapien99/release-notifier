@@ -17,11 +17,12 @@ before_install:
 - openssl aes-256-cbc -K $encrypted_fe7714c2356c_key -iv $encrypted_fe7714c2356c_iv
   -in 3682f9c6ae663734b9591d88df024abb5d161e14f59514d0077afaf6e19e4550.key.enc -out
   3682f9c6ae663734b9591d88df024abb5d161e14f59514d0077afaf6e19e4550.key -d
+- chmod 600 *.key
 - mkdir -p ~/.docker/trust/private
-- mv *.key ~/.docker/trust/private
-- chmod 600 ~/.docker/trust/private/*.key
-- cat ~/.docker/trust/private/3682f9c6ae663734b9591d88df024abb5d161e14f59514d0077afaf6e19e4550.key
-- docker trust key load -D ~/.docker/trust/private/3682f9c6ae663734b9591d88df024abb5d161e14f59514d0077afaf6e19e4550.key
+- mkdir -p .docker/trust/private
+- cp *.key ~/.docker/trust/private
+- cp *.key .docker/trust/private
+- docker -D trust key load ~/.docker/trust/private/3682f9c6ae663734b9591d88df024abb5d161e14f59514d0077afaf6e19e4550.key
 - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
 - docker build -t ${IMAGE}:${COMMIT} .
 - export VERSION=$(curl --silent "https://api.github.com/repos/aquasecurity/trivy/releases/latest"
