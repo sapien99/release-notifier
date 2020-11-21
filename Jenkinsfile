@@ -20,6 +20,12 @@ pipeline {
                 sh 'docker trust sign $IMAGE:$TAG'
             }
         }        
+        stage('Push') {
+            agent any
+            steps {
+                sh 'docker push $IMAGE:$TAG'
+            }
+        }        
     }
     post { 
         always { 
