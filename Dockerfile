@@ -1,4 +1,4 @@
-FROM alpine as base
+FROM stereum/beacon-base:3.12 as base
 # Optional Configuration Parameter
 ARG SERVICE_USER
 ARG SERVICE_HOME
@@ -21,18 +21,9 @@ RUN \
   mkdir -p ${SERVICE_HOME} && \
   adduser -h ${SERVICE_HOME} -s /sbin/nologin -u 2000 -D ${SERVICE_USER} && \
   chown -R ${SERVICE_USER}:${SERVICE_USER} ${SERVICE_HOME}
-USER ${SERVICE_USER}
-WORKDIR ${SERVICE_HOME}
-
-from dist as scanned
-USER root
-RUN apk add curl \
-    && curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/master/contrib/install.sh | sh -s -- -b /usr/local/bin \
-    && trivy filesystem --exit-code 1 --no-progress -o /tmp/trivy-scanresult.txt /
 
 FROM dist as hardened
 USER root
 RUN rm -f /sbin/apk && rm -rf /etc/apk && rm -rf /lib/apk && rm -rf /usr/share/apk && rm -rf /var/lib/apk
-COPY --from=scanned /tmp/trivy-scanresult.txt /
 USER ${SERVICE_USER}
 WORKDIR ${SERVICE_HOME}

@@ -1,0 +1,23 @@
+{
+  "notifications": [
+    {
+      "type": "jenkins",
+      "url": "http://scooterlabs.com/echo"
+    }
+  ],
+  "repositories": [
+    {
+      "type": "github",
+      "name": "prometheus/prometheus",
+      "jenkins": {
+        "job": "job1",
+        "token": "foobar",
+        "buildParams": {
+          "ARG":"ONE"
+        }
+      }
+    }
+  ],
+  "owner": "jenkins"
+}
+
