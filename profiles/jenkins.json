@@ -2,19 +2,24 @@
   "notifications": [
     {
       "type": "jenkins",
-      "url": "http://scooterlabs.com/echo"
+      "url": "$JENKINS_URL"
     }
   ],
   "repositories": [
     {
-      "type": "github",
-      "name": "prometheus/prometheus",
+      "type": "docker",
+      "name": "library/alpine",
+      "pattern": "^[\\d]+\\.[\\d]+$",
       "jenkins": {
-        "job": "job1",
-        "token": "foobar",
-        "buildParams": {
-          "ARG":"ONE"
-        }
+        "user":"$JENKINS_USER",
+        "token": "$JENKINS_APP_TOKEN",        
+        "job": {
+          "name": "$JOB_NAME",        
+          "token": "$JOB_TOKEN",
+          "params": {
+            "BASE":"<%= latest %>"
+          }
+        }        
       }
     }
   ],

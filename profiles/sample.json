@@ -5,6 +5,11 @@
       "pattern": "^v",
       "filter": "v",
       "type": "docker"
+    },
+    {      
+      "pattern": "^v",      
+      "type": "github",
+      "name": "prometheus/prometheus"
     }
   ],
   "owner": "sample",
