@@ -19,15 +19,7 @@ pipeline {
             steps {
                 sh 'docker trust sign $IMAGE:$TAG'
             }
-        }
-        stage('Ansible') {
-            agent any
-            steps {
-                dir("docker-build") {
-                    sh 'ansible-playbook -i /etc/ansible/inventory.yaml deployment/playbook.yaml'
-                }
-            }
-        }
+        }        
     }
     post { 
         always { 
