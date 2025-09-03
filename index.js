@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const GithubNews = require('./lib/githubnews');
 const DockerNews = require('./lib/dockernews');
 const Notifier = require('./lib/notifier');
+const semver = require('semver');
 
 class Main {
 
@@ -35,10 +36,12 @@ class Main {
             let news = [];
             for (let i = 0; i < result.length; i++) {
                 let repository = result[i];              
-                if (!repository._current || repository._current != repository.latest) {                      
-                    await this.notifier.notify(feed.notifications, repository)                    
-                    repository._current = repository.latest;
-                    news.push(repository);
+                if (!repository._current || repository._current != repository.latest) {
+                    if (repository.semver && semver.satisfies(repository.latest, repository.semver)) {                                                
+                        await this.notifier.notify(feed.notifications, repository)                    
+                        repository._current = repository.latest;
+                        news.push(repository);
+                    }                    
                 }
                 results.push(repository);
             }

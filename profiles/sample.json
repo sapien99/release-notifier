@@ -1,1 +1,11 @@
-{"repositories":[{"pattern":"^v","type":"github","name":"prometheus/prometheus","created":"2025-07-14T15:34:17Z","published":"2025-07-14T16:54:21Z","latest":"v3.5.0","url":"https://api.github.com/repos/prometheus/prometheus/releases/232283475","_lastUpdate":"2025-09-03T16:35:57.683Z","_current":"v3.5.0"}],"owner":"sample","notifications":[{"type":"text"}]}
+{
+  "repositories": [
+    {
+      "semver": "^3.0.0",
+      "type": "github",
+      "name": "prometheus/prometheus"
+    }
+  ],
+  "owner": "sample",
+  "notifications": [{ "type": "text" }]
+}
