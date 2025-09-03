@@ -68,10 +68,7 @@ class Main {
         this.ghn = new GithubNews();
         this.dockern = new DockerNews();                
         let Datastore = null;
-        if (process.env.DATASTORE == 'file') 
-            Datastore = require('./lib/FileDataStore');
-        else 
-            Datastore = require('./lib/GoogleDataStore');
+        Datastore = require('./lib/FileDataStore');
         this.datastore = new Datastore();
         this.notifier = new Notifier();    
     }    

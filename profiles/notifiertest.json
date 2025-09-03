@@ -1,0 +1,23 @@
+{
+  "repositories": [
+    {      
+      "pattern": "^v",      
+      "type": "github",
+      "name": "prometheus/prometheus"
+    }
+  ],
+  "owner": "notifiertest",
+  "notifications": [
+    {
+      "type": "slack",
+      "url": "$SLACK_HOOK_URL"
+    },
+    {
+      "type": "discord",
+      "url": "$DISCORD_HOOK_URL"
+    },
+    {
+      "type": "text"
+    }
+  ]
+}
